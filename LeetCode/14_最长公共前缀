@@ -1,0 +1,60 @@
+## 题目
+查找字符串数组中的最长公共前缀，如果不存在公共前缀，返回空字符串 ""，详见[最长公共前缀](https://leetcode-cn.com/problems/longest-common-prefix/)
+
+## 算法
+### solution 1
+```JAVA
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        if(strs == null || strs.length == 0) return "";
+        int res = -1, charPos = 0;
+        char c = ' ';
+        boolean flag = true;
+        while(flag){
+            for(int i=0;i<strs.length;i++){
+                if(charPos>=strs[i].length()){
+                    flag = false;
+                    break;
+                }else{
+                    if(i==0)
+                        c = strs[i].charAt(charPos);
+                    else if(strs[i].charAt(charPos) != c){
+                        flag = false;
+                        break;
+                    }
+                }
+            }
+            charPos++;
+            res++;
+        }
+        if(res == -1)
+            return "";
+        else
+            return strs[0].substring(0,res);
+    }
+}
+```
+#### 思路
+首先要考虑异常情况，即空或者空串；其次，从第一个字符开始，对比数组中每一个字符串的字符，
+直到有不匹配或者超过当前字符串的长度，最后返回截止位置之前子串即可
+
+### solution 2
+```JAVA
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        int n = strs.length;
+        if (n == 0) return "";
+        String pattern = strs[0];
+        for (int i = 1; i < n; i++) {
+            while (strs[i].indexOf(pattern) != 0) {
+                pattern = pattern.substring(0, pattern.length() - 1);
+                if (pattern.isEmpty()) return "";
+            }
+        }
+        return pattern;
+    }
+}
+```
+#### 思路
+将第一个字符串作为标尺，找到其与第二个字符串的公共前缀，如果没有公共前缀则直接返回空，如果有，则用这个公共前缀去与第三个字符串比较，
+重复这个进程，最后返回最终的公共子串即可。
